@@ -1,0 +1,724 @@
+
+create database project;
+
+      -------------Creating Tables------------
+        1.  create table Role
+	  (
+	  RoleId int primary key,
+	  Role varchar(10) not null);
+	 
+      Desc Role;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| RoleId | int         | NO   | PRI | NULL    |       |
+| Role   | varchar(10) | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+	 
+	  
+	2.  create table user
+	  (
+	  UId int primary key,
+	  Uname varchar(20) not null,
+	  Email varchar(20) not null,
+	  Address varchar(50) not null,
+	  MobileNo varchar(20)not null,
+	  RoleId int,
+	  foreign key(RoleId) references Role(RoleId));
+	  
+	  desc user;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| UId      | int         | NO   | PRI | NULL    |       |
+| Uname    | varchar(20) | NO   |     | NULL    |       |
+| Email    | varchar(20) | NO   |     | NULL    |       |
+| Address  | varchar(50) | NO   |     | NULL    |       |
+| MobileNo | varchar(20) | NO   |     | NULL    |       |
+| RoleId   | int         | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+	  
+	3.  create table Provider
+	  (
+	  Pro_Id int primary key,
+	  UId int,
+	  foreign key (UId) references user(UId),
+	  Description varchar(30) not null,
+	  Location varchar(30) not null);	  
+	  
+	  desc Provider;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| Pro_Id      | int         | NO   | PRI | NULL    |       |
+| UId         | int         | YES  | MUL | NULL    |       |
+| Description | varchar(30) | NO   |     | NULL    |       |
+| Location    | varchar(30) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+	  
+	4.  create table Customer
+	  (
+	   Cst_Id int primary key,
+	   UId int,
+	   foreign key (UId) references user(UId),
+	   Membership boolean,
+	   Start_date date ,
+	   End_date date);
+	   
+	   desc Customer;
++------------+------------+------+-----+---------+-------+
+| Field      | Type       | Null | Key | Default | Extra |
++------------+------------+------+-----+---------+-------+
+| Cst_Id     | int        | NO   | PRI | NULL    |       |
+| UId        | int        | YES  | MUL | NULL    |       |
+| Membership | tinyint(1) | YES  |     | NULL    |       |
+| Start_date | date       | YES  |     | NULL    |       |
+| End_date   | date       | YES  |     | NULL    |       |
++------------+------------+------+-----+---------+-------+
+  
+    5. create table Booking
+	   (
+	   BId int primary key,
+	   Cst_Id int,
+	   foreign key(Cst_Id) references user(UId),
+	   Pro_Id int,
+	   foreign key (Pro_Id) references user(UId),
+	   Time Time,
+	   Date Date,
+	   Status boolean);
+	   
+	   desc Booking;
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| BId    | int        | NO   | PRI | NULL    |       |
+| Cst_Id | int        | YES  | MUL | NULL    |       |
+| Pro_Id | int        | YES  | MUL | NULL    |       |
+| Time   | time       | YES  |     | NULL    |       |
+| Date   | date       | YES  |     | NULL    |       |
+| Status | tinyint(1) | YES  |     | NULL    |       |
++--------+------------+------+-----+---------+-------+
+	   
+	6.create table Payment
+	(
+	   PayId int primary key,
+	   from_id int not null,
+	   foreign key(from_id) references user(UId),
+	   To_id int not null,
+	   foreign key(To_id) references user(UId),
+	   Paid_Amount int not null,
+	   Total_Amount int not null,
+           Amount_remain int,
+	   TRXId int,
+	   date Date,
+	   duration_days int
+	);
++---------------+------+------+-----+---------+-------+
+| Field         | Type | Null | Key | Default | Extra |
++---------------+------+------+-----+---------+-------+
+| PayId         | int  | NO   | PRI | NULL    |       |
+| from_id       | int  | NO   | MUL | NULL    |       |
+| To_id         | int  | NO   | MUL | NULL    |       |
+| Paid_Amount   | int  | NO   |     | NULL    |       |
+| Total_Amount  | int  | NO   |     | NULL    |       |
+| Amount_remain | int  | YES  |     | NULL    |       |
+| TRXId         | int  | YES  |     | NULL    |       |
+| date          | date | YES  |     | NULL    |       |
+| duration_days | int  | YES  |     | NULL    |       |
++---------------+------+------+-----+---------+-------+
+	  
+	7. create table Accountdetails
+    (
+        AccId int primary key,
+        UId int,
+		foreign key(UId) references user(UId),
+		BankHolderName varchar(20) not null,
+        BankName varchar(20) not null,
+        IFSCcode varchar(20) not null,
+		AccountNo char(11));
+		
+	desc Accountdetails;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| AccId          | int         | NO   | PRI | NULL    |       |
+| UId            | int         | YES  | MUL | NULL    |       |
+| BankHolderName | varchar(20) | NO   |     | NULL    |       |
+| BankName       | varchar(20) | NO   |     | NULL    |       |
+| IFSCcode       | varchar(20) | NO   |     | NULL    |       |
+| AccountNo      | char(11)    | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+	
+	
+	8)   create table Delete_user
+	  (
+	  DUId int ,
+	  DUname varchar(20) not null,
+	  DEmail varchar(20) not null,
+	  DAddress varchar(30) not null,
+	  DMobileNo varchar(20)not null,
+	  DRoleId int,
+	  DPinCode char(10) not null);
+	 
+	desc Delete_user; 
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| DUId      | int         | YES  |     | NULL    |       |
+| DUname    | varchar(20) | NO   |     | NULL    |       |
+| DEmail    | varchar(20) | NO   |     | NULL    |       |
+| DAddress  | varchar(30) | NO   |     | NULL    |       |
+| DMobileNo | varchar(20) | NO   |     | NULL    |       |
+| DRoleId   | int         | YES  |     | NULL    |       |
+| DPinCode  | char(10)    | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+	9)
+	create table available_provider
+	(
+	pro_name varchar(20),
+	search_city varchar(20));
+
+	desc available_provider;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| pro_name    | varchar(20) | YES  |     | NULL    |       |
+| search_city | varchar(20) | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+        		
+------------------------ Creating Index   ----------------   
+   
+   Create index i_user_UId on user (UId);
+   
+	Show index from User ;
+--------------------------creating View-------------------
+Create View Admin as
+ 	select Uname ,Roleid from User where roleid =1;
+
+select * from admin;
++-------+--------+
+| Uname | Roleid |
++-------+--------+
+| Kiran |      1 |
++-------+--------+
+1 row in set (0.00 sec)
+	
+------------------------ Inserting Values ----------------
+
+1.Insert into Role(RoleId,Role)values
+(1,'Admin'),
+(2,'Provider'),
+(3,'Customer');	
++--------+----------+
+| RoleId | Role     |
++--------+----------+
+|      1 | Admin    |
+|      2 | Provider |
+|      3 | Customer |
++--------+----------+
+------------------------
+2.Table User...
+
+ insert into user(UId,Uname,Email,Address,MobileNO,RoleId) values
+ (1,'Ashok','abc@gmail.com','Pune','9632587410',2),
+ (2,'Anuja','xyz@gmail.com','Nashik','1472583690',2),
+ (3,'Kiran','uyt@gmail.com','Mumbai','9658745216',1),
+ (4,'Aditya','adi@gmail.com','satara','5856932147',3),
+ (5,'Ashish','ashu@gmail.com','Nashik','5565478963',3),
+ (6,'Arvind','arvind@gmail.com','Kolhapur','9545757370',3),
+ (7,'Atul','Atularmy@gmail.com','Satara','9970970215',3),
+ (8,'Arun','Aroo@gmail.com','Satara','7775916355',3),
+ (9,'Avinash','avi@gmail.com','Mumbai','8322195919',2),
+ (10,'Harshad','hrh@gmail.com','Mumbai','8308622001',2),
+ (11,'Balaji','bala@gmail.com','Kolhapur','6769376920',2),
+ (12,'Anirudh','anii@gmail.com','Pune','9867544509',2),
+ (13,'Krishna','krish@gmail.com','pune','8798096700',3);
+
+select * from User; 
++-----+---------+--------------------+----------+------------+--------+
+| UId | Uname   | Email              | Address  | MobileNo   | RoleId |
++-----+---------+--------------------+----------+------------+--------+
+|   1 | Ashok   | abc@gmail.com      | Pune     | 9632587410 |      2 |
+|   2 | Anuja   | xyz@gmail.com      | Nashik   | 1472583690 |      2 |
+|   3 | Kiran   | uyt@gmail.com      | Mumbai   | 9658745216 |      1 |
+|   4 | Aditya  | adi@gmail.com      | satara   | 5856932147 |      3 |
+|   5 | Ashish  | ashu@gmail.com     | Nashik   | 5565478963 |      3 |
+|   6 | Arvind  | arvind@gmail.com   | Kolhapur | 9545757370 |      3 |
+|   7 | Atul    | Atularmy@gmail.com | Satara   | 9970970215 |      3 |
+|   8 | Arun    | Aroo@gmail.com     | Satara   | 7775916355 |      3 |
+|   9 | Avinash | avi@gmail.com      | Mumbai   | 8322195919 |      2 |
+|  10 | Harshad | hrh@gmail.com      | Mumbai   | 8308622001 |      2 |
+|  11 | Balaji  | bala@gmail.com     | Kolhapur | 6769376920 |      2 |
+|  12 | Anirudh | anii@gmail.com     | Pune     | 9867544509 |      2 |
+|  13 | Krishna | krish@gmail.com    | pune     | 8798096700 |      3 |
++-----+---------+--------------------+----------+------------+--------+
+ -------------------------
+3.Table provider
+
+alter table provider modify Description varchar (100);
+alter table provider modify Location varchar (100);
+
+ insert into Provider(Pro_Id,UId,Description,Location ) values
+ (1,1,'Veg-NonVeg','Apt1,Gayatri nagar,Pokar colony,Chakan,Pune'),
+ (2,2,'Veg','Sai nagar,dindori road,Nashik'),
+ (3,9,'Veg-NonVeg,south foods','near railway station,Khargar'),
+ (4,10,'veg-NonVeg,Fast Foods','sector-22,Kamothe'),
+ (5,11,'Veg-NonVeg(special-tambda)',' behind university-kasba,Kolhapur'),
+ (6,12,'pure Veg(Special akka masur)','ramkrishna hall,pimpri,Pune');
+ 
+select * from provider;
+
++--------+------+------------------------------+---------------------------------------------+---------+
+| Pro_Id | UId  | Description                  | Location                                    | pincode |
++--------+------+------------------------------+---------------------------------------------+---------+
+|      1 |    1 | Veg-NonVeg                   | Apt1,Gayatri nagar,Pokar colony,Chakan,Pune | 410504  |
+|      2 |    2 | Veg                          | Sai nagar,dindori road,Nashik               | 422003  |
+|      3 |    9 | Veg-NonVeg,south foods       | near railway station,Khargar                | 400047  |
+|      4 |   10 | veg-NonVeg,Fast Foods        | sector-22,Kamothe                           | 400047  |
+|      5 |   11 | Veg-NonVeg(special-tambda)   |  behind university-kasba,Kolhapur           | 412102  |
+|      6 |   12 | pure Veg(Special akka masur) | ramkrishna hall,pimpri,Pune                 | 410506  |
++--------+------+------------------------------+---------------------------------------------+---------+
+
+
+ ----------------------
+4.Table Customer
+
+ insert into customer (Cst_Id,UId,Membership,Start_date,End_date) values
+ (1,4,1,'2021-01-10','2021-08-30'), 
+ (2,5,1,'2020-12-01','2021-07-30'),
+ (3,6,1,'2021-05-05','2021-07-05'),
+ (4,7,0,null,null),
+ (5,8,1,'2020-12-11','2021-12-11'),
+ (6,13,0,null,null);
+ 
+ select * from Customer;
++--------+------+------------+------------+------------+
+| Cst_Id | UId  | Membership | Start_date | End_date   |
++--------+------+------------+------------+------------+
+|      1 |    4 |          1 | 2021-01-10 | 2021-08-30 |
+|      2 |    5 |          1 | 2020-12-01 | 2021-07-30 |
+|      3 |    6 |          1 | 2021-05-05 | 2021-07-05 |
+|      4 |    7 |          0 | NULL       | NULL       |
+|      5 |    8 |          1 | 2020-12-11 | 2021-12-11 |
+|      6 |   13 |          0 | NULL       | NULL       |
++--------+------+------------+------------+------------+
+
+ -------------
+ 5.Table Booking
+ 
+ insert into Booking (BId,Cst_Id,Pro_Id,time,date,status)values
+ (1,6,2,'10:45:00','2012-12-11',1),
+ (2,7,1,'2:45:40','2020-12-11',1),
+ (3,8,10,'12:30:12','2021-05-30',1),
+ (4,5,11,'11:32:00','2021-05-06',1),
+ (5,13,12,'11:45:00','2021-07-03',0);
+ 
+ select * from Booking;
+
++-----+--------+--------+----------+------------+--------+
+| BId | Cst_Id | Pro_Id | Time     | Date       | Status |
++-----+--------+--------+----------+------------+--------+
+|   1 |      6 |      2 | 10:45:00 | 2012-12-11 |      1 |
+|   2 |      7 |      1 | 02:45:40 | 2020-12-11 |      1 |
+|   3 |      8 |     10 | 12:30:12 | 2021-05-30 |      1 |
+|   4 |      5 |     11 | 11:32:00 | 2021-05-06 |      1 |
+|   5 |     13 |     12 | 11:45:00 | 2021-07-03 |      0 |
++-----+--------+--------+----------+------------+--------+
+ ---------------
+ 6.Table Payment
+ 
+ insert into payment(Payid,from_id,To_id,Paid_Amount,Total_Amount,Amount_remain,TRXId,date,duration_days)values
+ (1,5,2,2000,3000,0,101,'2021-03-30',30),
+ (2,8,3,3000,4000,0,102,'2021-02-26',25),
+ (3,2,3,1000,1000,0,103,'2021-04-05',07),
+ (4,7,9,1000,1500,0,104,'2021-06-10',15);
+
+ select * from payment;
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+| PayId | from_id | To_id | Paid_Amount | Total_Amount | Amount_remain | TRXId | date       | duration_days |
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+|     1 |       5 |     2 |        2000 |         3000 |          1000 |   101 | 2021-03-30 |            30 |
+|     2 |       8 |     3 |        3000 |         2500 |          1000 |   102 | 2021-02-26 |            25 |
+|     3 |       2 |     3 |        1000 |          700 |             0 |   103 | 2021-04-05 |             7 |
+|     4 |       7 |     9 |        1000 |         1500 |           500 |   104 | 2021-06-10 |            15 |
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+4 rows in set (0.05 sec)
+
+ ------------------
+ 7.Table Accountdetails
+ 
+ insert into Accountdetails(Accid,Uid,BankHolderName,BankName,IFSCcode,AccountNo)values
+ (1,3,'KIran Dalavi','SBI','IFSC1234','14231212323'),
+ (2,2,'Anuja Rajguru','BOI','IFSC4567','29320847175'),
+ (3,1,'Ashok Kokare','SBI','IFSC7896','96541236545'),
+ (4,8,'Arun Patil','BOI','IFSC1235','98554896362'),
+ (5,5,'Ashish Sonawane','BOM','IFSC1563','96325415236'),
+ (6,9,'Avinash Mane','HDFC','IFSC1232','12322431152'),
+ (7,10,'Harshad Habiwant','SBI','IFSC7898','12346324907');
+ 
+ select * from Accountdetails;
+
+
++-------+------+------------------+----------+----------+-------------+
+| AccId | UId  | BankHolderName   | BankName | IFSCcode | AccountNo   |
++-------+------+------------------+----------+----------+-------------+
+|     1 |    3 | KIran Dalavi     | SBI      | IFSC1234 | 14231212323 |
+|     2 |    2 | Anuja Rajguru    | BOI      | IFSC4567 | 29320847175 |
+|     3 |    1 | Ashok Kokare     | SBI      | IFSC7896 | 96541236545 |
+|     4 |    8 | Arun Patil       | BOI      | IFSC1235 | 98554896362 |
+|     5 |    5 | Ashish Sonawane  | BOM      | IFSC1563 | 96325415236 |
+|     6 |    9 | Avinash Mane     | HDFC     | IFSC1232 | 12322431152 |
+|     7 |   10 | Harshad Habiwant | SBI      | IFSC7898 | 12346324907 |
++-------+------+------------------+----------+----------+-------------+
+7 rows in set (0.00 sec)
+ 
+------------------------display all tables-------------------------------------
+
+select * from role;
+
+select * from user;
+
+select * from provider;
+
+select * from booking;
+
+select * from payment;
+
+select * from accountdetails;
+
+select * from delete_user;
+
+select * from available_provider;
+
+
+
+-----------------------------add pincode column in user and provider table-------------------
+
+alter table user add pincode char(10);
+alter table provider add pincode char(10);
+
+----------------------------update values in pincode column of user table-------------------
+ update user  set pincode='410504' where uid = 1;
+ 
+ update user  set pincode='422003' where uid =2;
+  
+ update user  set pincode='400043' where uid = 3;
+  
+ update user  set pincode='415005' where uid = 4;
+  
+ update user  set pincode='422003' where uid = 5;
+  
+ update user  set pincode='412103' where uid = 6;
+  
+ update user  set pincode='415001' where uid = 7;
+  
+ update user  set pincode='415004' where uid = 8;
+  
+ update user  set pincode='400047' where uid = 9;
+
+ update user  set pincode='400047' where uid = 10;
+
+ update user  set pincode='412102' where uid = 11;
+
+ update user  set pincode='410506' where uid = 12;
+ 
+ update user  set pincode='410506' where uid = 13;
+
+
+ 
+  -----------------------------update for provider table-------------------
+ update provider set pincode='410506' where uid = 12;
+  
+ update provider set pincode='410504' where uid = 1;
+ 
+ update provider set pincode='422003' where uid =2;
+  
+ update provider set pincode='400047' where uid = 9;
+
+ update provider set pincode='400047' where uid = 10;
+
+ update provider set pincode='412102' where uid = 11; 
+
+
+
+  
+ ---------------------Qurey for Showing Roles of all persons->(Equi-Join) -----------------------
+
+1)Select Uname,Role from user,Role where Role.RoleId=User.RoleId;          ------> Shows all the roles of user
+
++---------+----------+
+| Uname   | Role     |
++---------+----------+
+| Ashok   | Provider |
+| Anuja   | Provider |
+| Kiran   | Admin    |
+| Aditya  | Customer |
+| Ashish  | Customer |
+| Arvind  | Customer |
+| Atul    | Customer |
+| Arun    | Customer |
+| Avinash | Provider |
+| Harshad | Provider |
+| Balaji  | Provider |
+| Anirudh | Provider |
+| Krishna | Customer |
++---------+----------+
+
+2)select * from user,provider where provider.uid =user.uid;                ------> Shows the information of provider.
+ 
+3)select * from user,customer where customer.uid =user.uid;                ------> Shows the information of Customer. 
+
+
+
+---------------------Sub-Query for displaying account details of person user want to pay ------------------------------
+
+select distinct accid,Bankholdername,Bankname,IFSCcode,AccountNo from accountdetails,payment
+where accountdetails.uid = (select  distinct to_id from payment where payment.to_id = accountdetails.uid);
+
++-------+----------------+----------+----------+-------------+
+| accid | Bankholdername | Bankname | IFSCcode | AccountNo   |
++-------+----------------+----------+----------+-------------+
+|     1 | KIran Dalavi   | SBI      | IFSC1234 | 14231212323 |
+|     2 | Anuja Rajguru  | BOI      | IFSC4567 | 29320847175 |
+|     6 | Avinash Mane   | HDFC     | IFSC1232 | 12322431152 |
++-------+----------------+----------+----------+-------------+
+
+----------------------Query for Showing payment and booking details using inner joint-----------------------------
+  
+ 1)Select p.PayId,u1.uname as from_id,u2.uname as to_id from payment p join user u1 on u1.uid=p.from_id join user u2 on u2.uid=p.to_id; 
+ 
++-------+---------+---------+
+| PayId | from_id | to_id   |
++-------+---------+---------+
+|     1 | Ashish  | Anuja   |
+|     2 | Arun    | Kiran   |
+|     3 | Anuja   | Kiran   |
+|     4 | Atul    | Avinash |
++-------+---------+---------+
+ for booking details:-
+ 
+2) Select b.bid ,u1.uname as cst_reserve , u2.uname as To_pro from booking b join user u1 on u1.uid=b.cst_id join user u2 on u2.uid=b.Pro_Id;
++-----+-------------+---------+
+| bid | cst_reserve | To_pro  |
++-----+-------------+---------+
+|   1 | Arvind      | Anuja   |
+|   2 | Atul        | Ashok   |
+|   3 | Arun        | Harshad |
+|   4 | Ashish      | Balaji  |
+|   5 | Krishna     | Anirudh |
++-----+-------------+---------+
+-------------------------------------PROCEDURES-----------------------------------------------------
+-------------------------------------provider details----------------------------------------------
+Delimiter $$
+create procedure Provider_Info_()
+Begin
+	select u1.uid,u1.uname,u1.email,u1.mobileno,p1.description,p1.location from user u1 inner join provider p1 on u1.uid=p1.uid;
+end $$
+Delimiter;
+
+call provider_info_();
+
++-----+---------+----------------+------------+------------------------------+---------------------------------------------+
+| uid | uname   | email          | mobileno   | description                  | location                                    |
++-----+---------+----------------+------------+------------------------------+---------------------------------------------+
+|   1 | Ashok   | abc@gmail.com  | 9632587410 | Veg-NonVeg                   | Apt1,Gayatri nagar,Pokar colony,Chakan,Pune |
+|   2 | Anuja   | xyz@gmail.com  | 1472583690 | Veg                          | Sai nagar,dindori road,Nashik               |
+|   9 | Avinash | avi@gmail.com  | 8322195919 | Veg-NonVeg,south foods       | near railway station,Khargar                |
+|  10 | Harshad | hrh@gmail.com  | 8308622001 | veg-NonVeg,Fast Foods        | sector-22,Kamothe                           |
+|  11 | Balaji  | bala@gmail.com | 6769376920 | Veg-NonVeg(special-tambda)   |  behind university-kasba,Kolhapur           |
+|  12 | Anirudh | anii@gmail.com | 9867544509 | pure Veg(Special akka masur) | ramkrishna hall,pimpri,Pune                 |
++-----+---------+----------------+------------+------------------------------+---------------------------------------------+
+------------------------------------ customer ----------------------------
+
+Delimiter $$
+create procedure cst_info()
+Begin
+    select u1.uid,u1.uname,u1.email,u1.mobileno,c.membership,c.start_date,c.end_date from user u1 join customer c on u1.uid=c.uid;
+End ;$$
+Delimiter ;
+
+call cst_info();
++-----+---------+--------------------+------------+------------+------------+------------+
+| uid | uname   | email              | mobileno   | membership | start_date | end_date   |
++-----+---------+--------------------+------------+------------+------------+------------+
+|   4 | Aditya  | adi@gmail.com      | 5856932147 |          1 | 2021-01-10 | 2021-08-30 |
+|   5 | Ashish  | ashu@gmail.com     | 5565478963 |          1 | 2020-12-01 | 2021-07-30 |
+|   6 | Arvind  | arvind@gmail.com   | 9545757370 |          1 | 2021-05-05 | 2021-07-05 |
+|   7 | Atul    | Atularmy@gmail.com | 9970970215 |          0 | NULL       | NULL       |
+|   8 | Arun    | Aroo@gmail.com     | 7775916355 |          1 | 2020-12-11 | 2021-12-11 |
+|  13 | Krishna | krish@gmail.com    | 8798096700 |          0 | NULL       | NULL       |
++-----+---------+--------------------+------------+------------+------------+------------+	
+
+---------------------------TRIGGERS--------------------------------
+
+Delimiter $$
+ create Trigger Before_delete_user
+ before delete
+ on user
+ for each row 
+ begin
+      insert into Delete_user (DUId,DUname,DEmail,DAddress,DMobileNo,DRoleId ,DPinCode)values 
+	  (old.uid,old.uname,old.email,old.Address,old.mobileno,old.roleid,old.pincode);
+ end$$
+ Delimiter ;
+ 
+show triggers;
+--------------------------------------------------------------------------------------------	    
+DELIMITER $$
+CREATE TRIGGER before_user_delete2_
+BEFORE DELETE
+ON user FOR EACH ROW
+BEGIN
+    If old.roleid=2 then
+	    set foreign_key_checks=0;
+        Delete from provider where uid=old.uid ;
+		Delete from Accountdetails where uid =old.uid;
+		set foreign_key_checks=1;
+    Else
+	set foreign_key_checks=0;
+	delete from customer where uid=old.uid ;
+    Delete from Accountdetails where uid =old.uid;
+	set foreign_key_checks=1;
+    End if;
+END;$$    
+DELIMITER;
+
+delete from user where uid=8;
+
+
+show triggers;
+----------------------------CURSOR-----------------------------------------
+
+1.Function for calculating total amount to be paid by customer
+
+delimiter //
+
+create function Total_amount_cal(y int)
+returns int
+deterministic
+begin
+     declare total int;
+     set total= y*100;
+     return total;
+end;//
+delimiter;
+
+----------------------------------------------------------------
+
+.procedure and cursor for calculating total amount using function
+delimiter //
+create procedure calculation()
+begin
+declare x int ;
+declare z int;
+declare finish int default 0;
+declare c1 cursor for select duration_days,total_amount from payment for update;
+declare continue handler for not found set finish = 1; 
+open c1;
+cursor_c1_loop:loop
+	fetch c1 into x,z;
+	if finish =1 then 
+		leave cursor_c1_loop;
+	end if;
+        update payment set total_amount=Total_amount_cal(x) where duration_days = x;
+end loop cursor_c1_loop;
+       
+close c1;
+commit;
+end; //
+delimiter ;
+
+mysql> call calculation;
+
+mysql> select * from payment;
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+| PayId | from_id | To_id | Paid_Amount | Total_Amount | Amount_remain | TRXId | date       | duration_days |
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+|     1 |       5 |     2 |        2000 |         3000 |          1000 |   101 | 2021-03-30 |            30 |
+|     2 |       8 |     3 |        3000 |         2500 |          1000 |   102 | 2021-02-26 |            25 |
+|     3 |       2 |     3 |        1000 |          700 |             0 |   103 | 2021-04-05 |             7 |
+|     4 |       7 |     9 |        1000 |         1500 |           500 |   104 | 2021-06-10 |            15 |
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+
+------------------------------------------------------------------------------
+
+2.cursor for calculating remaining amount to be paid by customer
+
+Delimiter //
+create procedure Remaining_amount()
+begin
+	declare a int;
+	declare b int;
+	declare c int;
+	declare finish int default 0;
+	declare c1 cursor for select Paid_amount,Total_amount,Amount_remain from payment for update;
+	declare continue handler for not found set finish = 1; 
+	open c1;
+	cursor_c1_loop:loop
+		fetch c1 into a,b,c;
+		if finish =1 then 
+			leave cursor_c1_loop;
+		end if;
+		set c = b-a;
+		update payment set Amount_remain=c where paid_amount=a and Total_amount=b;
+		
+	end loop cursor_c1_loop;
+	close c1;
+commit;
+end; //
+delimiter ;
+
+mysql> call remaining_amount;
+Query OK, 0 rows affected (0.75 sec)
+
+mysql> select * from payment;
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+| PayId | from_id | To_id | Paid_Amount | Total_Amount | Amount_remain | TRXId | date       | duration_days |
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+|     1 |       5 |     2 |        2000 |         3000 |          1000 |   101 | 2021-03-30 |            30 |
+|     2 |       8 |     3 |        3000 |         2500 |          -500 |   102 | 2021-02-26 |            25 |
+|     3 |       2 |     3 |        1000 |          700 |          -300 |   103 | 2021-04-05 |             7 |
+|     4 |       7 |     9 |        1000 |         1500 |           500 |   104 | 2021-06-10 |            15 |
++-------+---------+-------+-------------+--------------+---------------+-------+------------+---------------+
+
+------------------------------------------------------------------------------
+4. cursor for searching available providers in city
+
+
+delimiter //
+create procedure Search(x varchar(15))
+begin
+declare a varchar(15);
+declare b varchar(15);
+declare finish int default 0;
+declare c1 cursor for select uname,address from user where roleid =2 and address=x;
+declare continue handler for not found set finish = 1; 
+open c1;
+cursor_c1_loop:loop
+	fetch c1 into a,b;
+	if finish =1 then 
+		leave cursor_c1_loop;
+	end if;
+      insert into available_provider values(a,b); 
+end loop cursor_c1_loop;
+       
+close c1;
+end; //
+delimiter ;
+
++----------+-------------+
+| pro_name | search_city |
++----------+-------------+
+| Ashok    | Pune        |
+| Anirudh  | Pune        |
++----------+-------------+
+ 
+ -------------------------------------------------------------------------------
+ ********procedure for update available_provider table**********
+ 
+ delimiter //
+ create procedure update_avail_provider()
+ begin 
+       drop table available_provider;
+	   create table available_provider(pro_name varchar(20),search_city varchar(20));
+ end; //
+delimiter ; 
+	   
